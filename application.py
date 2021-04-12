@@ -16,6 +16,11 @@ application.config['MYSQL_DATABASE_USER'] = os.environ["MYSQL_DATABASE_USER"]
 application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_DATABASE_PASSWORD"]
 application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE_DB"]
 application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_DATABASE_HOST"]
+
+# application.config['MYSQL_DATABASE_USER'] = 'admin'
+# application.config['MYSQL_DATABASE_PASSWORD'] = '12345678'
+# application.config['MYSQL_DATABASE_DB'] = 'sparta'
+# application.config['MYSQL_DATABASE_HOST'] = 'database-1.cgbie0k3ndqh.ap-northeast-2.rds.amazonaws.com'
 mysql.init_app(application)
 
 # redis
@@ -48,9 +53,9 @@ def file_upload():
     conn.commit()
 
     # redis
-    cursor.execute("SELECT count(*) AS COUNT from file")
+    cursor.execute("SELECT count(*) from file")
     data = cursor.fetchone()
-    db.set("fileCount", str(data['COUNT']))
+    db.set("fileCount", data[0])
     return jsonify({'result': 'success'})
 
 @application.route('/file/count', methods=['GET'])
