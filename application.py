@@ -8,10 +8,10 @@ application = Flask(__name__)
 cors = CORS(application, resources={r"/*": {"origins": "*"}})
 
 mysql = MySQL()
-application.config['MYSQL_DATABASE_USER'] = os.environ["MYSQL_USER"]
-application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_PWD"]
-application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE"]
-application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_HOST"]
+application.config['MYSQL_DATABASE_USER'] = os.environ["MYSQL_DATABASE_USER"]
+application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_DATABASE_PASSWORD"]
+application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE_DB"]
+application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_DATABASE_HOST"]
 mysql.init_app(application)
 
 @application.route('/')
