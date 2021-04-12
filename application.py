@@ -16,14 +16,10 @@ application.config['MYSQL_DATABASE_USER'] = os.environ["MYSQL_DATABASE_USER"]
 application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_DATABASE_PASSWORD"]
 application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE_DB"]
 application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_DATABASE_HOST"]
-# application.config['MYSQL_DATABASE_USER'] = 'admin'
-# application.config['MYSQL_DATABASE_PASSWORD'] = '12345678'
-# application.config['MYSQL_DATABASE_DB'] = 'sparta'
-# application.config['MYSQL_DATABASE_HOST'] = 'database-1.cgbie0k3ndqh.ap-northeast-2.rds.amazonaws.com'
 mysql.init_app(application)
 
 # redis
-# db = redis.Redis(os.environ["REDIS_HOST"], decode_responses=True)
+db = redis.Redis(os.environ["REDIS_HOST"], decode_responses=True)
 
 
 @application.route('/')
@@ -54,7 +50,7 @@ def file_upload():
     cursor.execute("SELECT count(*) from file")
     data = cursor.fetchone()
     conn.close()
-    # db.set("fileCount", data[0])
+    db.set("fileCount", data[0])
 
     return jsonify({'result': 'success'})
 
@@ -68,9 +64,9 @@ def files():
 
     return jsonify({'result': 'success', 'files':data})
 
-# @application.route('/file/count', methods=['GET'])
-# def file_count():
-#     return jsonify({'result': 'success', 'count':db.get("fileCount")})
+@application.route('/file/count', methods=['GET'])
+def file_count():
+    return jsonify({'result': 'success', 'count':db.get("fileCount")})
 
 if __name__ == '__main__':
     application.debug = True
