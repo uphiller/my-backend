@@ -2,9 +2,17 @@ import boto3
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import os
+from flaskext.mysql import MySQL
 
 application = Flask(__name__)
 cors = CORS(application, resources={r"/*": {"origins": "*"}})
+
+mysql = MySQL()
+application.config['MYSQL_DATABASE_USER'] = os.environ["MYSQL_USER"]
+application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_PWD"]
+application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE"]
+application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_HOST"]
+mysql.init_app(application)
 
 @application.route('/')
 def main():
