@@ -50,7 +50,7 @@ def file_upload():
     # redis
     cursor.execute("SELECT count(*) AS COUNT from file")
     data = cursor.fetchone()
-    db.set("fileCount", data['COUNT'])
+    db.set("fileCount", str(data['COUNT']))
     return jsonify({'result': 'success'})
 
 @application.route('/file/count', methods=['GET'])
