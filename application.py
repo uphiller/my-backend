@@ -32,6 +32,11 @@ def file_upload():
         Key=file.filename,
         ContentType=file.content_type
     )
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute("insert into file(file_name) value('" + file.filename + "')")
+
     return jsonify({'result': 'success'})
 
 if __name__ == '__main__':
