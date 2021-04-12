@@ -24,7 +24,7 @@ application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_DATABASE_HOST"]
 mysql.init_app(application)
 
 # redis
-db = redis.Redis('sparta-redis.8imnfo.0001.apn2.cache.amazonaws.com')
+db = redis.Redis('sparta-redis.8imnfo.0001.apn2.cache.amazonaws.com', decode_responses=True)
 
 
 @application.route('/')
