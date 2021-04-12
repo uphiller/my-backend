@@ -49,10 +49,11 @@ def file_upload():
     cursor = conn.cursor()
     cursor.execute("insert into file(file_name) value('" + file.filename + "')")
     conn.commit()
-    conn.close()
+
 
     cursor.execute("SELECT count(*) from file")
     data = cursor.fetchone()
+    conn.close()
     # db.set("fileCount", data[0])
 
     return jsonify({'result': 'success'})
