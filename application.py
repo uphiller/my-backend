@@ -61,7 +61,7 @@ def files():
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute("SELECT file_name from file")
-    data = cursor.fetchone()
+    data = cursor.fetchall()
 
     return jsonify({'result': 'success', 'files':data})
 
