@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import os
 from flaskext.mysql import MySQL
-
+import redis
 
 application = Flask(__name__)
 
@@ -17,6 +17,9 @@ application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_DATABASE_PASSW
 application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE_DB"]
 application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_DATABASE_HOST"]
 mysql.init_app(application)
+
+# redis
+db = redis.Redis(os.environ["REDIS_HOST"], decode_responses=True)
 
 
 @application.route('/')
