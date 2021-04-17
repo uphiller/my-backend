@@ -2,35 +2,15 @@ import boto3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
-from flaskext.mysql import MySQL
-import redis
-import logging
-from logstash_async.handler import AsynchronousLogstashHandler
 
 application = Flask(__name__)
 
 # cors
 cors = CORS(application, resources={r"/*": {"origins": "*"}})
 
-# mysql
-mysql = MySQL()
-application.config['MYSQL_DATABASE_USER'] = os.environ["MYSQL_DATABASE_USER"]
-application.config['MYSQL_DATABASE_PASSWORD'] = os.environ["MYSQL_DATABASE_PASSWORD"]
-application.config['MYSQL_DATABASE_DB'] = os.environ["MYSQL_DATABASE_DB"]
-application.config['MYSQL_DATABASE_HOST'] = os.environ["MYSQL_DATABASE_HOST"]
-mysql.init_app(application)
-
-# redis
-db = redis.Redis(os.environ["REDIS_HOST"], decode_responses=True)
-
-#logstash
-python_logger = logging.getLogger('python-logstash-logger')
-python_logger.setLevel(logging.INFO)
-python_logger.addHandler(AsynchronousLogstashHandler(os.environ["LOGSTASH_HOST"], 5044, database_path=''))
 
 @application.route('/')
 def main():
-    python_logger.info('main')
     return "핵심 쏙쏙 AWS"
 
 @application.route('/fileupload', methods=['POST'])
@@ -48,32 +28,7 @@ def file_upload():
         ContentType=file.content_type
     )
 
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("insert into file(file_name) value('" + file.filename + "')")
-    conn.commit()
-
-    cursor.execute("SELECT count(*) from file")
-    data = cursor.fetchone()
-    conn.close()
-    db.set("fileCount", data[0])
-
-    python_logger.info(file.filename)
     return jsonify({'result': 'success'})
-
-@application.route('/files', methods=['GET'])
-def files():
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT file_name from file")
-    data = cursor.fetchall()
-    conn.close()
-
-    return jsonify({'result': 'success', 'files':data})
-
-@application.route('/file/count', methods=['GET'])
-def file_count():
-    return jsonify({'result': 'success', 'count':db.get("fileCount")})
 
 if __name__ == '__main__':
     application.debug = True
