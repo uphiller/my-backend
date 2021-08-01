@@ -2,7 +2,7 @@ name: backend
 on:
   push:
     branches:
-      - main
+      - anaconda
 jobs:
   build:
     runs-on: ubuntu-latest
